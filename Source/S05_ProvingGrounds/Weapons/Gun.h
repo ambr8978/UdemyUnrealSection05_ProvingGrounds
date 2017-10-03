@@ -42,6 +42,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 	class UAnimInstance* AnimInstance;
 
+	UFUNCTION(BlueprintCallable, Category = Setup)
 	void OnFire();
 protected:
 	// Called when the game starts or when spawned
