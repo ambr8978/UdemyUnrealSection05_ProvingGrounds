@@ -6,7 +6,7 @@
 // Sets default values
 ATile::ATile()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 }
@@ -14,7 +14,7 @@ ATile::ATile()
 void ATile::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 void ATile::Tick(float DeltaTime)
@@ -24,5 +24,13 @@ void ATile::Tick(float DeltaTime)
 }
 
 void ATile::PlaceActors() {
+	//See lecture 287 for metric details
+	FVector Min(0, -2000, 0);
+	FVector Max(4000, 2000, 0);
+	FBox Bounds(Min, Max);
 
+	for (int i = 0; i < 20; i++) {
+		FVector SpawnPoint = FMath::RandPointInBox(Bounds);
+		UE_LOG(LogTemp, Warning, TEXT("SpawnPoint: %s"), *SpawnPoint.ToString());
+	}
 }
