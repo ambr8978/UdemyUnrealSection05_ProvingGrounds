@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Tile.h"
-
+#include "Runtime/Engine/Classes/GameFramework/Actor.h"
 
 // Sets default values
 ATile::ATile()
@@ -23,14 +23,17 @@ void ATile::Tick(float DeltaTime)
 
 }
 
-void ATile::PlaceActors() {
+void ATile::PlaceActors(TSubclassOf<AActor> ToSpawn, int MinSpawn, int MaxSpawn) {
 	//See lecture 287 for metric details
 	FVector Min(0, -2000, 0);
 	FVector Max(4000, 2000, 0);
 	FBox Bounds(Min, Max);
+	int NumberToSpawn = FMath::RandRange(MinSpawn, MaxSpawn);
 
-	for (int i = 0; i < 20; i++) {
+	for (int i = 0; i < NumberToSpawn; i++) {
 		FVector SpawnPoint = FMath::RandPointInBox(Bounds);
-		UE_LOG(LogTemp, Warning, TEXT("SpawnPoint: %s"), *SpawnPoint.ToString());
+		AActor* Spawned = GetWorld()->SpawnActor<AActor>(ToSpawn);
+		Spawned->SetActorRelativeLocation(SpawnPoint);
+		Spawned->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
 	}
 }
