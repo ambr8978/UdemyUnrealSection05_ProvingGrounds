@@ -2,6 +2,8 @@
 
 #include "Tile.h"
 #include "Runtime/Engine/Classes/GameFramework/Actor.h"
+#include "Runtime/Engine/Public/WorldCollision.h"
+#include "DrawDebugHelpers.h"
 
 // Sets default values
 ATile::ATile()
@@ -14,6 +16,12 @@ ATile::ATile()
 void ATile::BeginPlay()
 {
 	Super::BeginPlay();
+
+	//300 is arbitrary value that we believe is big enough to see
+	//see more details in lecture 289
+	CastSphere(GetActorLocation(), 300);
+	//Create second sphere off the ground
+	CastSphere(GetActorLocation() + FVector(0,0,1000), 300);
 
 }
 
@@ -36,4 +44,23 @@ void ATile::PlaceActors(TSubclassOf<AActor> ToSpawn, int MinSpawn, int MaxSpawn)
 		Spawned->SetActorRelativeLocation(SpawnPoint);
 		Spawned->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
 	}
+}
+
+bool ATile::CastSphere(FVector Location, float Radius) {
+	//see lecture 289 for function creation breakdown
+
+	FHitResult HitResult;
+	bool HasHit = GetWorld()->SweepSingleByChannel(
+		HitResult,
+		Location,
+		Location,
+		FQuat::Identity,
+		ECollisionChannel::ECC_Camera,
+		FCollisionShape::MakeSphere(Radius)
+	);
+
+	FColor ResultColor = (HasHit == true) ? FColor::Red : FColor::Green;
+	DrawDebugSphere(GetWorld(), Location, Radius, 100, ResultColor, true, 100);
+
+	return HasHit;
 }
