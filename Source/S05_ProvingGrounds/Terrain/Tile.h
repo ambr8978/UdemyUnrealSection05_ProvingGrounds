@@ -29,10 +29,13 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 private:
 	UActorPool* Pool;
+	AActor* NavMeshBoundsVolume;
 
+	void PositionNavMeshBoundsVolume();
 	bool FindEmptyLocation(float Radius, FVector& OutLocation);
 	void PlaceActor(TSubclassOf<AActor> ToSpawn, FVector SpawnPoint, float Rotation, float Scale);
 	bool CanSpawnAtLocation(FVector Location, float Radius);

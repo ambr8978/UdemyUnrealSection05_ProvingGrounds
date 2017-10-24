@@ -13,14 +13,32 @@ UActorPool::UActorPool()
 	// ...
 }
 
-AActor* UActorPool::Checkout() {
+AActor* UActorPool::Checkout()
+{
+	UE_LOG(LogTemp, Warning, TEXT("[%s] Checkout."), *GetName());
 	return nullptr;
 }
 
-void UActorPool::Return(AActor* ActorToReturn) {
-
+void UActorPool::Return(AActor* ActorToReturn)
+{
+	if (ActorToReturn == nullptr) 
+	{
+		UE_LOG(LogTemp, Warning, TEXT("[%s] Null actor returned."), *GetName());
+	}
+	else 
+	{
+		UE_LOG(LogTemp, Warning, TEXT("[%s] Actor returned: {%s}."), *GetName(), *ActorToReturn->GetName());
+	}
 }
 
-void UActorPool::Add(AActor* ActorToAdd) {
-
+void UActorPool::Add(AActor* ActorToAdd)
+{
+	if (ActorToAdd == nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("[%s] Added null actor."), *GetName());
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("[%s] Actor added: {%s}."), *(GetName()), *(ActorToAdd->GetName()));
+	}
 }
