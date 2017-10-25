@@ -27,6 +27,9 @@ public:
 	void SetPool(UActorPool* Pool);
 
 protected:
+	UPROPERTY(EditDefaultsOnly, Category = "Navigation")
+	FVector NavigationBoundsOffset;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Spawning")
 	FVector MinExtent;
 
