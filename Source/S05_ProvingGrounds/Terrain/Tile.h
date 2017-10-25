@@ -8,6 +8,16 @@
 
 class UActorPool;
 
+USTRUCT()
+struct FSpawnPosition
+{
+	GENERATED_USTRUCT_BODY()
+
+	FVector Location;
+	float Rotation;
+	float Scale;
+};
+
 UCLASS()
 class S05_PROVINGGROUNDS_API ATile : public AActor
 {
@@ -46,6 +56,6 @@ private:
 
 	void PositionNavMeshBoundsVolume();
 	bool FindEmptyLocation(float Radius, FVector& OutLocation);
-	void PlaceActor(TSubclassOf<AActor> ToSpawn, FVector SpawnPoint, float Rotation, float Scale);
+	void PlaceActor(TSubclassOf<AActor> ToSpawn, FSpawnPosition SpawnPosition);
 	bool CanSpawnAtLocation(FVector Location, float Radius);
 };
