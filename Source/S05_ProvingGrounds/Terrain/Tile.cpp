@@ -31,7 +31,8 @@ void ATile::PositionNavMeshBoundsVolume()
 	NavMeshBoundsVolume = Pool->Checkout();
 	if (NavMeshBoundsVolume == nullptr) {
 		UE_LOG(LogTemp, Warning, TEXT("[%s] Not enough actors in pool"), *GetName());
-	} else {
+	}
+	else {
 		UE_LOG(LogTemp, Warning, TEXT("[%s] checked out: %s"), *GetName(), *NavMeshBoundsVolume->GetName());
 		NavMeshBoundsVolume->SetActorLocation(GetActorLocation() + NavigationBoundsOffset);
 		GetWorld()->GetNavigationSystem()->Build();
@@ -43,7 +44,7 @@ void ATile::BeginPlay()
 	Super::BeginPlay();
 }
 
-void ATile::EndPlay(const EEndPlayReason::Type EndPlayReason) 
+void ATile::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Pool->Return(NavMeshBoundsVolume);
 }
@@ -55,6 +56,17 @@ void ATile::Tick(float DeltaTime)
 }
 
 void ATile::PlaceActors(TSubclassOf<AActor> ToSpawn, int MinSpawn, int MaxSpawn, float Radius, float MinScale, float MaxScale) {
+	TArray<FSpawnPosition> SpawnPositions = GenerateRandomSpawnPositions(MinSpawn, MaxSpawn, Radius, MinScale, MaxScale);
+
+	for (FSpawnPosition SpawnPosition : SpawnPositions)
+	{
+		PlaceActor(ToSpawn, SpawnPosition);
+	}
+}
+
+TArray<FSpawnPosition> ATile::GenerateRandomSpawnPositions(int MinSpawn, int MaxSpawn, float Radius, float MinScale, float MaxScale)
+{
+	TArray<FSpawnPosition> SpawnPositions;
 	int NumberToSpawn = FMath::RandRange(MinSpawn, MaxSpawn);
 
 	for (int i = 0; i < NumberToSpawn; i++) {
@@ -63,11 +75,14 @@ void ATile::PlaceActors(TSubclassOf<AActor> ToSpawn, int MinSpawn, int MaxSpawn,
 
 		SpawnPosition.Scale = FMath::RandRange(MinScale, MaxScale);
 		bool found = FindEmptyLocation(Radius * SpawnPosition.Scale, SpawnPosition.Location);
-		if (found) {
+		if (found)
+		{
 			SpawnPosition.Rotation = FMath::RandRange(-180.0f, 180.0f);
-			PlaceActor(ToSpawn, SpawnPosition);
+			SpawnPositions.Add(SpawnPosition);
 		}
 	}
+
+	return SpawnPositions;
 }
 
 bool ATile::FindEmptyLocation(float Radius, FVector& OutLocation) {

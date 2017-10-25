@@ -55,6 +55,7 @@ private:
 	AActor* NavMeshBoundsVolume;
 
 	void PositionNavMeshBoundsVolume();
+	TArray<FSpawnPosition> GenerateRandomSpawnPositions(int MinSpawn, int MaxSpawn, float Radius, float MinScale, float MaxScale);
 	bool FindEmptyLocation(float Radius, FVector& OutLocation);
 	void PlaceActor(TSubclassOf<AActor> ToSpawn, FSpawnPosition SpawnPosition);
 	bool CanSpawnAtLocation(FVector Location, float Radius);
